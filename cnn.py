@@ -35,25 +35,54 @@ testset = torchvision.datasets.USPS('./data',
 trainloader = torch.utils.data.DataLoader(trainset, shuffle=True)
 testloader = torch.utils.data.DataLoader(testset,shuffle=False)
 
+# Experiment 2 - Start
+
+#class CNN(nn.Module):
+#    def __init__(self):
+#        super(CNN, self).__init__()
+#        self.conv1 = nn.Conv2d(1, 8, kernel_size=3)
+#        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+#        self.conv2 = nn.Conv2d(8, 16, kernel_size=3)
+#        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+#        self.fc1 = nn.Linear(4 * 4 * 4, 32)
+#        self.fc2 = nn.Linear(32, 10)
+#
+#    def forward(self, x):
+#        x = self.pool(torch.nn.functional.relu(self.conv1(x)))
+#        x = self.pool(torch.nn.functional.relu(self.conv2(x)))
+#        x = x.view(-1, 4 * 4 * 4)
+#        x = torch.nn.functional.relu(self.fc1(x))
+#        x = self.fc2(x)
+#        return x
+#
+#net = CNN()
+
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(1, 8, kernel_size=3)
+        self.conv1 = nn.Conv2d(1, 8, kernel_size=2)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv2 = nn.Conv2d(8, 16, kernel_size=3)
+        self.conv2 = nn.Conv2d(8, 16, kernel_size=2)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = nn.Linear(4 * 4 * 4, 32)
-        self.fc2 = nn.Linear(32, 10)
+        self.conv3 = nn.Conv2d(16, 64, kernel_size=2)
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(4 * 4 * 4, 64)
+        self.fc2 = nn.Linear(64, 32)
+        self.fc3 = nn.Linear(32, 10)
 
     def forward(self, x):
         x = self.pool(torch.nn.functional.relu(self.conv1(x)))
         x = self.pool(torch.nn.functional.relu(self.conv2(x)))
+        x = self.pool(torch.nn.functional.relu(self.conv3(x)))
         x = x.view(-1, 4 * 4 * 4)
         x = torch.nn.functional.relu(self.fc1(x))
         x = self.fc2(x)
+        x = self.fc3(x)
         return x
 
 net = CNN()
+
+# Experiment 2 - End
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 net.to(device)
