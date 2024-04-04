@@ -59,7 +59,10 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 net.to(device)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001)
+# Experiment 1 - Start
+# optimizer = optim.SGD(net.parameters(), lr=0.001)
+optimizer = optim.Adam(net.parameters(), lr=0.001)
+# Experiment 1 - Complete
 current_loss = 0.0
 
 for i in range(5):
