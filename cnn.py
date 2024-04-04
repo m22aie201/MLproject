@@ -35,7 +35,7 @@ testset = torchvision.datasets.USPS('./data',
 trainloader = torch.utils.data.DataLoader(trainset, shuffle=True)
 testloader = torch.utils.data.DataLoader(testset,shuffle=False)
 
-# Experiment 2 - Start
+# Experiment 2,3 - Start
 
 #class CNN(nn.Module):
 #    def __init__(self):
@@ -60,13 +60,13 @@ testloader = torch.utils.data.DataLoader(testset,shuffle=False)
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(1, 8, kernel_size=2)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3,padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv2 = nn.Conv2d(8, 16, kernel_size=2)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3,padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv3 = nn.Conv2d(16, 64, kernel_size=2)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3,padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = nn.Linear(4 * 4 * 4, 64)
+        self.fc1 = nn.Linear(8 * 4 * 4 * 4, 64)
         self.fc2 = nn.Linear(64, 32)
         self.fc3 = nn.Linear(32, 10)
 
@@ -74,7 +74,7 @@ class CNN(nn.Module):
         x = self.pool(torch.nn.functional.relu(self.conv1(x)))
         x = self.pool(torch.nn.functional.relu(self.conv2(x)))
         x = self.pool(torch.nn.functional.relu(self.conv3(x)))
-        x = x.view(-1, 4 * 4 * 4)
+        x = x.view(-1, 8 * 4 * 4 * 4)
         x = torch.nn.functional.relu(self.fc1(x))
         x = self.fc2(x)
         x = self.fc3(x)
@@ -82,16 +82,16 @@ class CNN(nn.Module):
 
 net = CNN()
 
-# Experiment 2 - End
+# Experiment 2,3 - End
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 net.to(device)
 
 criterion = nn.CrossEntropyLoss()
-# Experiment 1 - Start
-# optimizer = optim.SGD(net.parameters(), lr=0.001)
-optimizer = optim.Adam(net.parameters(), lr=0.001)
-# Experiment 1 - Complete
+# Experiment 1,3 - Start
+optimizer = optim.SGD(net.parameters(), lr=0.001)
+# optimizer = optim.Adam(net.parameters(), lr=0.001)
+# Experiment 1,3 - Complete
 current_loss = 0.0
 
 for i in range(5):
